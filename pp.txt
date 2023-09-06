@@ -14,10 +14,16 @@ test
 Test via Github
 
 hallo
+Test123
+Test12345
+Test123
 Guten Tag
 
 hallo welt
 
+<<<<<<< HEAD
+helo
+=======
 TEST
 Ich teste ob ich das bearbeiten kann
 
@@ -36,3 +42,4 @@ dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
 invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero
 eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no
 sea takimata sanctus est Lorem ipsum dolor sit amet.
+>>>>>>> 5bd24315bdc71cf473d8cb223ffbe11bbed62bb4
