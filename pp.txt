@@ -6,12 +6,14 @@ hallo
 Test via Github
 
 hallo
-
+Guten Tag
 
 hallo welt
 
-<<<<<<< HEAD
 TEST
-=======
 Ich teste ob ich das bearbeiten kann
->>>>>>> 03c835ec3b8e95d4361fe17d52cbd78fb9a42246
+
+Ich teste ob ich das bearbeiten kann - ich auch
+
+Hallo Kuse
+
