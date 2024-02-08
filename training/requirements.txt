@@ -1,0 +1,9 @@
+ipykernel
+matplotlib
+numpy
+pandas
+
+tensorflow
+keras
+
+gensim
