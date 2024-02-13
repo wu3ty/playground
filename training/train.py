@@ -1,4 +1,4 @@
-from keras.datasets import imdb
+from torchtext.datasets import IMDB
 
 # use a subset of the data, load it and give an overview
 vocabulary_size = 50000

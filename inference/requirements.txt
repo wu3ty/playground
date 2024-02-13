@@ -2,6 +2,4 @@ Flask
 Flask-RESTful
 flask_restx
 torch 
-torchvision 
-torchaudio
 torchtext

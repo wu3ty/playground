@@ -1,33 +1,72 @@
 from flask import Flask
 from flask_restx import Api, Resource
 import urllib.request
-
-import keras 
-from keras.utils import pad_sequences
+import torch
+from torchtext.data.utils import get_tokenizer
 
 REST_API_PORT = 5000
 
 # perform preprocessing for inference, so that it executes faster
 
-# create word to index dictionary
-print("Creating word lookup")
-NUM_WORDS=50000 # only use top 50000 words
-MAX_WORDS = 200
-INDEX_FROM=3   # word index offset
-word_to_id = keras.datasets.imdb.get_word_index()
-word_to_id = {k:(v+INDEX_FROM) for k,v in word_to_id.items()}
-word_to_id["<PAD>"] = 0
-word_to_id["<START>"] = 1
-word_to_id["<UNK>"] = 2
-word_to_id["<UNUSED>"] = 3
-id_to_word = {value:key for key,value in word_to_id.items()}
 
 # deserialize keras model
 print("Downloading Sentiment model...")
-urllib.request.urlretrieve("https://storage.googleapis.com/stefans-modelle/sentiment.keras", "sentiment.keras")
+urllib.request.urlretrieve("https://storage.googleapis.com/stefans-modelle/sentiment-model.pt", "sentiment-model-latest.pt")
 
-print("Deserializing Keras model")
-loaded_model = keras.saving.load_model("sentiment.keras")
+print("Downloading text data...")
+urllib.request.urlretrieve("https://storage.googleapis.com/stefans-modelle/text.pkl", "text.pkl")
+
+from torch import nn
+import torch.nn.functional as F
+
+class TextClassificationModel(nn.Module):
+    def __init__(self, vocab_size, embedding_dim, output_dim):
+        super().__init__()
+        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        self.fc = nn.Linear(embedding_dim, output_dim)
+        
+    def forward(self, text):
+        embedded = self.embedding(text)
+        embedded = embedded.permute(1, 0, 2)
+        pooled = F.avg_pool2d(embedded, (embedded.shape[1], 1)).squeeze(1) 
+        return self.fc(pooled)
+    
+
+# Define a tokenizer function to preprocess the text
+tokenizer = get_tokenizer('basic_english')
+
+import pickle
+from torchtext.vocab import build_vocab_from_iterator
+
+# load input reference text
+file = open("text.pkl",'rb')
+texts = pickle.load(file)
+file.close()
+
+
+# Build the vocabulary from the text data
+vocab = build_vocab_from_iterator(map(tokenizer, texts), specials=['<unk>'])
+vocab.set_default_index(vocab['<unk>'])
+
+# Define a text pipeline function that tokenizes and numericalizes a given sentence using the vocabulary
+text_pipeline = lambda x: vocab(tokenizer(x))
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+# Define a function that predicts the sentiment of a given sentence using the model
+def predict_sentiment(model, sentence):
+    model.eval()
+    text = torch.tensor(text_pipeline(sentence)).unsqueeze(1).to(device)
+    prediction = model(text)
+
+    pred = torch.sigmoid(prediction).item()
+    return "positive" if pred > 0.5 else "negative"
+
+print("Deserializing PyTorch model")
+loaded_model = TextClassificationModel(vocab_size = len(vocab), embedding_dim = 100, output_dim = 1)
+loaded_model.load_state_dict(torch.load('sentiment-model-latest.pt'))
+
 print("Done preprocessing")
 
 app = Flask(__name__)
@@ -40,34 +79,26 @@ ns = api.namespace('sentiment')
 @ns.route('/<string:sentence>')
 @ns.response(200, 'Inference was successful')
 @ns.response(400, 'Invalid sentence provided')
-@ns.param('sentence', f'The sentence (max {MAX_WORDS} words) for which the sentiment is determined as "positive" or "negative"')
+@ns.param('sentence', f'The sentence for which the sentiment is determined as "positive" or "negative"')
 class GenderInference(Resource):
     def get(self,sentence):
         """
             Inferes the sentiment based on a sentence
         """
-        if not sentence or len(sentence.split(" ")) > MAX_WORDS:
-            api.abort(400, "A sentence needs to be provided with a maximum of 200 words")
+        if not sentence:
+            api.abort(400, "A sentence needs to be provided with a minium of 1 character")
 
-        sentence_input = "<START> " + sentence.lower()
-        sentence_tokens = [word_to_id.get(i, word_to_id.get("<UNK>")) for i in sentence_input.split(" ")]
-        sentence_tokens
-
-        if None in sentence_tokens:
-            print("ERROR")
-
-        print(sentence_tokens)
-        inference_data = pad_sequences([sentence_tokens], maxlen=MAX_WORDS)
-        res = loaded_model.predict(inference_data)
-
-        if res:
-            data = {"sentiment" : "negative", "sentence_tokens" : sentence_tokens}
-            if res[0][0] > 0.5:
-                data["sentiment"] = "positive"
-        else:
-            api.abort(500, "something went terribly wrong")
+        try:
+            prediction = predict_sentiment(loaded_model, sentence)
+            
+            data = {"sentiment" : prediction}
+            
+            return data
+        except Exception as e:
+            api.abort(500, "something went terribly wrong: " + e)
 
         return data     
 
 if __name__ == '__main__':
-    app.run(port=REST_API_PORT)
+    # host="0.0.0.0" is critical
+    app.run(host="0.0.0.0", port=REST_API_PORT)
