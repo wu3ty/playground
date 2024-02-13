@@ -4,7 +4,7 @@ import urllib.request
 import torch
 from torchtext.data.utils import get_tokenizer
 
-REST_API_PORT = 5000
+REST_API_PORT = 8080
 
 # perform preprocessing for inference, so that it executes faster
 
