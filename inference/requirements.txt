@@ -1,5 +1,7 @@
 Flask
 Flask-RESTful
 flask_restx
-keras
-tensorflow
+torch 
+torchvision 
+torchaudio
+torchtext

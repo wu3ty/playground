@@ -3,8 +3,3 @@ matplotlib
 numpy
 pandas
 
-tensorflow
-keras
-
-gcloud
-oauth2client
