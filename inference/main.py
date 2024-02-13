@@ -7,7 +7,7 @@ from keras.utils import pad_sequences
 
 REST_API_PORT = 5000
 
-# perform preprocessing for inference
+# perform preprocessing for inference, so that it executes faster
 
 # create word to index dictionary
 print("Creating word lookup")
