@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restx import Api, Resource
+import urllib.request
 
 import keras 
 from keras.utils import pad_sequences
@@ -22,6 +23,9 @@ word_to_id["<UNUSED>"] = 3
 id_to_word = {value:key for key,value in word_to_id.items()}
 
 # deserialize keras model
+print("Downloading Sentiment model...")
+urllib.request.urlretrieve("https://storage.googleapis.com/stefans-modelle/sentiment.keras", "sentiment.keras")
+
 print("Deserializing Keras model")
 loaded_model = keras.saving.load_model("sentiment.keras")
 print("Done preprocessing")

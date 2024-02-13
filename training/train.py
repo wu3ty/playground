@@ -62,3 +62,4 @@ scores = model.evaluate(X_test, y_test, verbose=0)
 print('Test accuracy:', scores[1])
 
 model.save("sentiment.keras")
+

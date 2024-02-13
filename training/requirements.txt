@@ -6,4 +6,5 @@ pandas
 tensorflow
 keras
 
-gensim
+gcloud
+oauth2client
