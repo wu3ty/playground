@@ -11,3 +11,4 @@ COPY ./main.py .
 
 # Start API
 ENTRYPOINT ["python3", "main.py"]
+
