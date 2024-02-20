@@ -1,7 +1,7 @@
 # get pytorch base
 FROM ghcr.io/pytorch/pytorch:2.0.1-runtime
 
-# Install Linux dependencies
+# Install Linux dependencies - nothing today
 #RUN apt-get update 
 #RUN apt-get -y install python3 python3-pip
 
@@ -15,3 +15,4 @@ COPY ./main.py .
 
 # Start API
 ENTRYPOINT ["python3", "main.py"]
+
