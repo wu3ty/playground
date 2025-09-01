@@ -52,4 +52,8 @@ yoyo ich war da
 
 =======
 Hallo PP
+<<<<<<< HEAD
 >>>>>>> a2d11c0a318fc79556cc310cd665f638ba7f5ab2
+=======
+Dies ist ein Test
+>>>>>>> aa6f6bb (pp.txt geändet)
