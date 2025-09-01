@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+Alles überschrieben lulz
+=======
+<<<<<<< HEAD
 Hallo
 Hallo
 hallo
@@ -34,6 +37,7 @@ Ich teste ob ich das bearbeiten kann
 Ich teste ob ich das bearbeiten kann - ich auch
 
 Irgendwas
+Leck
 
 
 Hallo Kuse
@@ -51,4 +55,9 @@ yoyo ich war da
 
 =======
 Hallo PP
+<<<<<<< HEAD
 >>>>>>> a2d11c0a318fc79556cc310cd665f638ba7f5ab2
+=======
+Dies ist ein Test
+>>>>>>> aa6f6bb (pp.txt geändet)
+>>>>>>> f3dd2f17900cbfb3db4c60bc0969170e44b0d9d8
