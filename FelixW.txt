@@ -1,4 +1,0 @@
-FelixW erster Commit ins Repo
-
-Hier habe ich etwas in meinem Branch angepasst
-
