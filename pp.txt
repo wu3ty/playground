@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Hallo
 Hallo
 hallo
@@ -48,3 +49,6 @@ sea takimata sanctus est Lorem ipsum dolor sit amet.
 
 yoyo ich war da
 
+=======
+Hallo PP
+>>>>>>> a2d11c0a318fc79556cc310cd665f638ba7f5ab2
