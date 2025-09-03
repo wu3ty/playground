@@ -1,1 +1,1 @@
-"TEST" 
+ECHO ist eingeschaltet (ON).
