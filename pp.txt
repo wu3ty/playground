@@ -1,5 +1,9 @@
+
+ECHO ist eingeschaltet (ON).
+
 Hallo Programmierprojekt
 
 
 
 test test
+
